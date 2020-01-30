@@ -498,7 +498,7 @@ interface IQueryBuilder {
 	 *         ->select('u.name')
 	 *         ->from('users', 'u')
 	 *         ->rightJoin('u', 'phonenumbers', 'p', 'p.is_primary = 1');
-	 * </code>
+	 * </code>/
 	 *
 	 * @param string $fromAlias The alias that points to a from clause.
 	 * @param string $join The table name to join.
