@@ -169,15 +169,7 @@ class Encryption extends Wrapper {
 		return $this->storage->filesize($path);
 	}
 
-	/**
-	 * @param string $path
-	 * @return array
-	 */
-	public function getMetaData($path) {
-		$data = $this->storage->getMetaData($path);
-		if (is_null($data)) {
-			return null;
-		}
+	private function modifyMetaData(array $data): array {
 		$fullPath = $this->getFullPath($path);
 		$info = $this->getCache()->get($path);
 
@@ -196,6 +188,24 @@ class Encryption extends Wrapper {
 		}
 
 		return $data;
+	}
+
+	/**
+	 * @param string $path
+	 * @return array
+	 */
+	public function getMetaData($path) {
+		$data = $this->storage->getMetaData($path);
+		if (is_null($data)) {
+			return null;
+		}
+		return $this->modifyMetaData($data);
+	}
+
+	public function getDirectoryContent($directory): \Traversable {
+		foreach ($this->getWrapperStorage()->getDirectoryContent($directory) as $data) {
+			yield $this->modifyMetaData($data);
+		}
 	}
 
 	/**
